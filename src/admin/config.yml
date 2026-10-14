@@ -127,10 +127,10 @@ collections:
           - { label: "ที่อยู่", name: "address", widget: "string" }
           - { label: "ลิงก์ LINE", name: "line_url", widget: "string" }
           - { label: "LINE ID (ขึ้นต้นด้วย @)", name: "line_id", widget: "string" }
-          - { label: "ลิงก์ Facebook", name: "facebook_url", widget: "string", required: false }
+          - { label: "ลิงก์ Facebook", name: "facebook_url", widget: "string", required: false, hint: "เปิดเพจ Facebook ของศูนย์ฯ แล้วคัดลอกลิงก์จากแถบที่อยู่มาวาง" }
           - { label: "ลิงก์ YouTube", name: "youtube_url", widget: "string", required: false }
           - { label: "ลิงก์เว็บโรงเรียน", name: "school_url", widget: "string", required: false }
-          - { label: "ลิงก์ Google Maps", name: "map_url", widget: "string" }
+          - { label: "Google Place ID (แผนที่/รีวิว)", name: "map_place_id", widget: "string", hint: "รหัสสถานที่ของ ศูนย์เฝ้าไข้ พรการุญ บน Google Maps ใช้กับปุ่มดูเส้นทางและปุ่มรีวิว ปกติไม่ต้องแก้" }
           - { label: "ละติจูด (แผนที่)", name: "map_lat", widget: "string" }
           - { label: "ลองจิจูด (แผนที่)", name: "map_lng", widget: "string" }
           - { label: "ชื่อหน้าเว็บบน Google", name: "seo_title", widget: "string" }

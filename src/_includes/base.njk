@@ -6,6 +6,9 @@
 {%- set pageTitle = (title + " | " + settings.site_name) if title else settings.seo_title %}
 {%- set pageDesc = description or summary or settings.seo_description %}
 {%- set pageUrl = settings.site_url + page.url %}
+{%- set mapDir = "https://www.google.com/maps/dir/?api=1&destination=" + settings.map_lat + "," + settings.map_lng + "&destination_place_id=" + settings.map_place_id %}
+{%- set mapReview = "https://search.google.com/local/writereview?placeid=" + settings.map_place_id %}
+{%- set mapOpen = "https://www.google.com/maps/search/?api=1&query=" + settings.map_lat + "," + settings.map_lng + "&query_place_id=" + settings.map_place_id %}
 {%- set pageImage = settings.site_url + (cover or ogImage or "/images/site/og-image.jpg") %}
 <title>{{ pageTitle }}</title>
 <meta name="description" content="{{ pageDesc }}">
@@ -39,7 +42,7 @@
   "email": {{ settings.email | dump | safe }},
   "address": { "@type": "PostalAddress", "streetAddress": {{ settings.address | dump | safe }}, "addressLocality": "อุดรธานี", "postalCode": "41000", "addressCountry": "TH" },
   "geo": { "@type": "GeoCoordinates", "latitude": {{ settings.map_lat }}, "longitude": {{ settings.map_lng }} },
-  "hasMap": {{ settings.map_url | dump | safe }},
+  "hasMap": {{ mapOpen | dump | safe }},
   "areaServed": "จังหวัดอุดรธานี",
   "sameAs": [{{ settings.facebook_url | dump | safe }}, {{ settings.youtube_url | dump | safe }}]
 }
@@ -51,7 +54,7 @@
 
 <div class="topbar">
   <div class="wrap topbar__inner">
-    <span>บริการเฝ้าไข้ ดูแลผู้สูงอายุ จังหวัดอุดรธานี · {{ settings.hours }}</span>
+    <span><span class="topbar__tag">บริการเฝ้าไข้ ดูแลผู้สูงอายุ จังหวัดอุดรธานี · </span><span class="nowrap">{{ settings.hours }}</span></span>
     <span class="topbar__links">
       <a href="{{ settings.phone | telHref }}">โทร {{ settings.phone }}</a>
       <a href="{{ settings.line_url }}">LINE {{ settings.line_id }}</a>
@@ -100,8 +103,8 @@
     <div class="footer__map">
       <iframe title="แผนที่ {{ settings.address_name }}" src="https://maps.google.com/maps?q={{ settings.map_lat }},{{ settings.map_lng }}&z=16&hl=th&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <div class="pill-row">
-        <a class="pill" href="{{ settings.map_url }}">ดูเส้นทาง</a>
-        <a class="pill" href="{{ settings.map_url }}">รีวิวเราบน Google</a>
+        <a class="pill" href="{{ mapDir }}">ดูเส้นทาง</a>
+        <a class="pill" href="{{ mapReview }}">รีวิวเราบน Google</a>
       </div>
     </div>
   </div>

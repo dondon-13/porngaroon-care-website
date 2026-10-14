@@ -52,6 +52,7 @@ p { margin: 0; }
 .topbar__inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; padding-top: 8px; padding-bottom: 8px; }
 .topbar__links { display: flex; flex-wrap: wrap; gap: 20px; }
 .topbar a { color: #fff; }
+.nowrap { white-space: nowrap; }
 .header { position: sticky; top: 0; z-index: 40; background: #fff; border-bottom: 3px solid var(--blue-line); }
 .header__inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding-top: 12px; padding-bottom: 12px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0; }
@@ -200,6 +201,9 @@ p { margin: 0; }
 @media (max-width: 760px) {
   body { font-size: 16px; }
   .menu-btn { display: inline-flex; }
+  .topbar__tag { display: none; }
+  .topbar { font-size: 13px; }
+  .topbar__inner { gap: 4px 16px; padding-top: 6px; padding-bottom: 6px; }
   .nav { display: none; width: 100%; flex-direction: column; align-items: stretch; gap: 0; padding-bottom: 8px; }
   .nav.is-open { display: flex; }
   .nav a:not(.btn) { padding: 12px 4px; border-bottom: 1px solid var(--mint-line); }
