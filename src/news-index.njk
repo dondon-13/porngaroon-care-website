@@ -1,0 +1,16 @@
+---
+layout: base.njk
+permalink: /news/
+title: ข้อมูลข่าวสาร
+description: ข่าวสารและความรู้การดูแลผู้สูงอายุ ผู้ป่วยติดเตียง และผู้ป่วยระยะพักฟื้น จากพรการุญเฝ้าไข้ อุดรธานี
+---
+<section class="news-page wrap">
+  <h1 class="h2">ข้อมูลข่าวสาร</h1>
+  {%- if collections.posts.length %}
+  <div class="news-grid">
+    {%- for post in collections.posts %}{% include "news-card.njk" %}{% endfor %}
+  </div>
+  {%- else %}
+  <p class="empty">ยังไม่มีบทความในขณะนี้ ติดตามข่าวสารได้ทาง <a href="{{ settings.facebook_url }}">Facebook</a> หรือสอบถามทาง <a href="{{ settings.line_url }}">LINE</a></p>
+  {%- endif %}
+</section>

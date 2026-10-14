@@ -1,0 +1,139 @@
+# ระบบหลังบ้าน (Decap CMS) — ทีมงานแก้ไขเนื้อหาที่ /admin
+backend:
+  name: git-gateway
+  branch: main
+
+site_url: https://www.xn--12cc6a2dc4ab3jd1d3e4b9cd.com
+display_url: https://www.xn--12cc6a2dc4ab3jd1d3e4b9cd.com
+logo_url: /images/site/logo.png
+
+media_folder: "src/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "news"
+    label: "ข้อมูลข่าวสาร / บทความ"
+    label_singular: "บทความ"
+    description: "เขียนข่าวหรือบทความความรู้ใหม่ กด Publish แล้วจะขึ้นเว็บภายใน 1-2 นาที"
+    folder: "src/news"
+    extension: "md"
+    format: "frontmatter"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}"
+    sortable_fields: ["date", "title"]
+    summary: "{{title}} — {{date | date('DD/MM/YYYY')}}"
+    fields:
+      - { label: "หัวข้อ", name: "title", widget: "string" }
+      - { label: "วันที่", name: "date", widget: "datetime", date_format: "DD/MM/YYYY", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "หมวดหมู่", name: "category", widget: "select", options: ["ความรู้การดูแล", "ข่าวสาร / โปรโมชั่น", "กิจกรรม", "วิดีโอ"], default: "ความรู้การดูแล" }
+      - { label: "รูปปก (แนวนอน 16:9)", name: "cover", widget: "image", required: false, choose_url: false, hint: "รูปปกทุกบทความจะแสดงในกรอบแนวนอนขนาดเดียวกัน (16:9) แนะนำรูปขนาด 1600×900 px ถ้าไม่ใส่ เว็บจะแสดงรูปโลโก้แทน ดูตัวอย่างได้ทางขวา" }
+      - { label: "จัดตำแหน่งรูปปกในกรอบ", name: "cover_position", widget: "select", default: "center", required: false, hint: "ถ้าหัวคนในรูปถูกตัด ให้เลือก \"ด้านบน\"", options: [ { label: "ด้านบนของรูป", value: "top" }, { label: "กลางรูป", value: "center" }, { label: "ด้านล่างของรูป", value: "bottom" } ] }
+      - { label: "คำอธิบายสั้น (สำหรับ Google)", name: "summary", widget: "text", required: false, hint: "1-2 ประโยค สรุปว่าบทความนี้เกี่ยวกับอะไร" }
+      - { label: "ซ่อนบทความนี้ (ยังไม่เผยแพร่)", name: "hidden", widget: "boolean", default: false, required: false }
+      - { label: "เนื้อหา", name: "body", widget: "markdown", editor_components: ["image", "youtube"], hint: "ใส่รูป: กดปุ่ม + ในแถบเครื่องมือ แล้วเลือก Image · ใส่วิดีโอ: กด + แล้วเลือก วิดีโอ YouTube" }
+
+  - name: "pages"
+    label: "เนื้อหาหน้าเว็บ"
+    description: "แก้ไขข้อความ รูป บริการ ราคา เคส และคำถามที่พบบ่อยบนหน้าแรก"
+    files:
+      - name: "cases"
+        label: "ภาพผลงานเคสที่ผ่านมา"
+        file: "src/_data/cases.json"
+        fields:
+          - { label: "หัวข้อส่วนนี้", name: "title", widget: "string" }
+          - label: "เคส (ลากเพื่อเรียงลำดับ)"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.caption}}"
+            fields:
+              - { label: "รูป", name: "image", widget: "image", hint: "แนะนำรูปแนวนอน และเบลอหน้าผู้ป่วยก่อนอัปโหลด" }
+              - { label: "คำบรรยาย", name: "caption", widget: "string" }
+
+      - name: "pricing"
+        label: "ค่าบริการ (ปุ่มสอบถามราคาทาง LINE)"
+        file: "src/_data/pricing.json"
+        fields:
+          - { label: "หัวข้อ", name: "title", widget: "string" }
+          - { label: "ข้อความแนะนำ", name: "intro", widget: "text" }
+          - { label: "ข้อความเพิ่มเติม", name: "note", widget: "string" }
+          - label: "รูปแบบบริการ"
+            name: "plans"
+            widget: "list"
+            summary: "{{fields.name}}"
+            fields:
+              - { label: "ชื่อ", name: "name", widget: "string" }
+              - { label: "รายละเอียด", name: "detail", widget: "string" }
+              - { label: "ข้อความที่พิมพ์ไว้ให้ใน LINE", name: "line_message", widget: "string", hint: "เช่น สนใจบริการรายเดือน" }
+
+      - name: "services"
+        label: "บริการของเรา"
+        file: "src/_data/services.json"
+        fields:
+          - { label: "ข้อความแนะนำ", name: "intro", widget: "text" }
+          - label: "บริการ"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "ชื่อบริการ", name: "title", widget: "string" }
+              - { label: "รายละเอียด", name: "text", widget: "text" }
+
+      - name: "faq"
+        label: "คำถามที่พบบ่อย"
+        file: "src/_data/faq.json"
+        fields:
+          - label: "คำถาม"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.question}}"
+            fields:
+              - { label: "คำถาม", name: "question", widget: "string" }
+              - { label: "คำตอบ", name: "answer", widget: "text" }
+
+      - name: "home"
+        label: "หน้าแรก (ข้อความและรูปหลัก)"
+        file: "src/_data/home.json"
+        fields:
+          - { label: "หัวข้อใหญ่", name: "hero_title", widget: "string" }
+          - { label: "หัวข้อรอง (ขึ้นบรรทัดใหม่ได้)", name: "hero_subtitle", widget: "text" }
+          - { label: "ข้อความแนะนำ", name: "hero_text", widget: "text" }
+          - { label: "รูปวงกลมหน้าแรก", name: "hero_image", widget: "image", hint: "แนะนำรูปสี่เหลี่ยมจัตุรัส" }
+          - label: "จุดเด่น 4 ข้อ"
+            name: "trust_points"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "หัวข้อ", name: "title", widget: "string" }
+              - { label: "รายละเอียด", name: "text", widget: "string" }
+          - { label: "หัวข้อส่วนคนไข้เดินได้/ติดเตียง", name: "types_title", widget: "string" }
+          - { label: "รูปคนไข้เดินได้", name: "type_walking_image", widget: "image" }
+          - { label: "รูปคนไข้ติดเตียง", name: "type_bedridden_image", widget: "image" }
+          - { label: "เกี่ยวกับเรา: หัวข้อ", name: "about_title", widget: "string" }
+          - { label: "เกี่ยวกับเรา: หัวข้อรอง", name: "about_subtitle", widget: "string" }
+          - { label: "เกี่ยวกับเรา: ย่อหน้า 1", name: "about_text_1", widget: "text" }
+          - { label: "เกี่ยวกับเรา: ย่อหน้า 2", name: "about_text_2", widget: "text" }
+          - { label: "เกี่ยวกับเรา: รูป", name: "about_image", widget: "image" }
+
+      - name: "settings"
+        label: "ข้อมูลติดต่อและตั้งค่าเว็บ"
+        file: "src/_data/settings.json"
+        fields:
+          - { label: "ชื่อเว็บ", name: "site_name", widget: "string" }
+          - { label: "ชื่อภาษาอังกฤษ", name: "site_name_en", widget: "string" }
+          - { label: "เบอร์โทร", name: "phone", widget: "string", hint: "เบอร์นี้ใช้กับปุ่มโทรทุกจุดบนเว็บ" }
+          - { label: "อีเมล", name: "email", widget: "string" }
+          - { label: "เวลาทำการ", name: "hours", widget: "string" }
+          - { label: "ชื่อสถานที่", name: "address_name", widget: "string" }
+          - { label: "ที่อยู่", name: "address", widget: "string" }
+          - { label: "ลิงก์ LINE", name: "line_url", widget: "string" }
+          - { label: "LINE ID (ขึ้นต้นด้วย @)", name: "line_id", widget: "string" }
+          - { label: "ลิงก์ Facebook", name: "facebook_url", widget: "string", required: false }
+          - { label: "ลิงก์ YouTube", name: "youtube_url", widget: "string", required: false }
+          - { label: "ลิงก์เว็บโรงเรียน", name: "school_url", widget: "string", required: false }
+          - { label: "ลิงก์ Google Maps", name: "map_url", widget: "string" }
+          - { label: "ละติจูด (แผนที่)", name: "map_lat", widget: "string" }
+          - { label: "ลองจิจูด (แผนที่)", name: "map_lng", widget: "string" }
+          - { label: "ชื่อหน้าเว็บบน Google", name: "seo_title", widget: "string" }
+          - { label: "คำอธิบายบน Google", name: "seo_description", widget: "text" }
+          - { label: "ที่อยู่เว็บ (ห้ามแก้)", name: "site_url", widget: "hidden" }
+          - { label: "ที่อยู่เว็บแบบภาษาไทย", name: "site_url_display", widget: "hidden" }

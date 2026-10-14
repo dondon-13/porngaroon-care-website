@@ -1,0 +1,18 @@
+---
+layout: base.njk
+ogType: article
+---
+<article class="post wrap-narrow">
+  <a class="link-strong" href="/news/">ข้อมูลข่าวสารทั้งหมด</a>
+  <p class="post__meta">{{ category }} · <time datetime="{{ page.date | isoDate }}">{{ page.date | thaiDate }}</time></p>
+  <h1 class="post__title">{{ title }}</h1>
+  {%- if cover %}<img class="post__cover" src="{{ cover }}" alt="" width="1600" height="900" style="object-position: center {{ cover_position or 'center' }}">{% endif %}
+  <div class="post__body">{{ content | safe }}</div>
+  <div class="post__cta">
+    <p>สนใจบริการหรือมีคำถามเรื่องการดูแล ติดต่อทีมงานได้เลย</p>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="{{ settings.line_url }}">ปรึกษาทาง LINE</a>
+      <a class="btn btn--outline" href="{{ settings.phone | telHref }}">โทร {{ settings.phone }}</a>
+    </div>
+  </div>
+</article>

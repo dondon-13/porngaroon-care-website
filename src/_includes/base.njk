@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{%- set pageTitle = (title + " | " + settings.site_name) if title else settings.seo_title %}
+{%- set pageDesc = description or summary or settings.seo_description %}
+{%- set pageUrl = settings.site_url + page.url %}
+{%- set pageImage = settings.site_url + (cover or ogImage or "/images/site/og-image.jpg") %}
+<title>{{ pageTitle }}</title>
+<meta name="description" content="{{ pageDesc }}">
+<link rel="canonical" href="{{ pageUrl }}">
+<meta property="og:type" content="{{ 'article' if ogType == 'article' else 'website' }}">
+<meta property="og:locale" content="th_TH">
+<meta property="og:site_name" content="{{ settings.site_name }}">
+<meta property="og:title" content="{{ pageTitle }}">
+<meta property="og:description" content="{{ pageDesc }}">
+<meta property="og:url" content="{{ pageUrl }}">
+<meta property="og:image" content="{{ pageImage }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2F7C97">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/site/favicon-32.png">
+<link rel="apple-touch-icon" href="/images/site/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&family=Anuphan:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": {{ settings.address_name | dump | safe }},
+  "alternateName": {{ settings.site_name | dump | safe }},
+  "description": {{ settings.seo_description | dump | safe }},
+  "url": {{ settings.site_url | dump | safe }},
+  "logo": {{ (settings.site_url + "/images/site/logo.png") | dump | safe }},
+  "image": {{ (settings.site_url + "/images/site/og-image.jpg") | dump | safe }},
+  "telephone": {{ settings.phone | dump | safe }},
+  "email": {{ settings.email | dump | safe }},
+  "address": { "@type": "PostalAddress", "streetAddress": {{ settings.address | dump | safe }}, "addressLocality": "อุดรธานี", "postalCode": "41000", "addressCountry": "TH" },
+  "geo": { "@type": "GeoCoordinates", "latitude": {{ settings.map_lat }}, "longitude": {{ settings.map_lng }} },
+  "hasMap": {{ settings.map_url | dump | safe }},
+  "areaServed": "จังหวัดอุดรธานี",
+  "sameAs": [{{ settings.facebook_url | dump | safe }}, {{ settings.youtube_url | dump | safe }}]
+}
+</script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหา</a>
+
+<div class="topbar">
+  <div class="wrap topbar__inner">
+    <span>บริการเฝ้าไข้ ดูแลผู้สูงอายุ จังหวัดอุดรธานี · {{ settings.hours }}</span>
+    <span class="topbar__links">
+      <a href="{{ settings.phone | telHref }}">โทร {{ settings.phone }}</a>
+      <a href="{{ settings.line_url }}">LINE {{ settings.line_id }}</a>
+    </span>
+  </div>
+</div>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <a class="brand" href="/">
+      <img src="/images/site/logo.png" alt="" width="72" height="72">
+      <span class="brand__text"><span class="brand__name">พรการุญเฝ้าไข้</span><span class="brand__sub">{{ settings.site_name_en }}</span></span>
+    </a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      เมนู
+    </button>
+    <nav id="main-nav" class="nav" aria-label="เมนูหลัก">
+      <a href="/#services">บริการของเรา</a>
+      <a href="/#pricing">ค่าบริการ</a>
+      <a href="/news/">ข้อมูลข่าวสาร</a>
+      <a href="/#faq">คำถามที่พบบ่อย</a>
+      <a href="/#contact">ติดต่อเรา</a>
+      <a class="btn btn--primary nav__cta" href="{{ settings.line_url }}">ปรึกษาทาง LINE</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+{{ content | safe }}
+</main>
+
+<footer id="contact" class="footer">
+  <div class="wrap footer__inner">
+    <div class="footer__info">
+      <h2 class="footer__name">{{ settings.site_name }}</h2>
+      <p>{{ settings.address_name }}<br>{{ settings.address }}</p>
+      <p>โทร <a href="{{ settings.phone | telHref }}">{{ settings.phone }}</a><br>อีเมล <a href="mailto:{{ settings.email }}">{{ settings.email }}</a><br>{{ settings.hours }}</p>
+      <div class="pill-row">
+        <a class="pill pill--solid" href="{{ settings.line_url }}">LINE</a>
+        {% if settings.facebook_url %}<a class="pill pill--solid" href="{{ settings.facebook_url }}">Facebook</a>{% endif %}
+        {% if settings.youtube_url %}<a class="pill pill--solid" href="{{ settings.youtube_url }}">YouTube</a>{% endif %}
+        {% if settings.school_url %}<a class="pill" href="{{ settings.school_url }}">โรงเรียนพรการุญบริบาล</a>{% endif %}
+      </div>
+    </div>
+    <div class="footer__map">
+      <iframe title="แผนที่ {{ settings.address_name }}" src="https://maps.google.com/maps?q={{ settings.map_lat }},{{ settings.map_lng }}&z=16&hl=th&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="pill-row">
+        <a class="pill" href="{{ settings.map_url }}">ดูเส้นทาง</a>
+        <a class="pill" href="{{ settings.map_url }}">รีวิวเราบน Google</a>
+      </div>
+    </div>
+  </div>
+  <p class="footer__copy">© {{ year }} {{ settings.site_url_display }}</p>
+</footer>
+
+<a class="call-fab" href="{{ settings.phone | telHref }}" aria-label="โทร {{ settings.phone }}">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+</a>
+
+<script src="/js/main.js" defer></script>
+<script>
+  window.addEventListener("load", function () {
+    if (window.netlifyIdentity) {
+      netlifyIdentity.on("init", function (user) {
+        if (!user) netlifyIdentity.on("login", function () { document.location.href = "/admin/"; });
+      });
+    }
+  });
+</script>
+</body>
+</html>

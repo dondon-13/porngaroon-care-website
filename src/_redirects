@@ -1,0 +1,17 @@
+# ที่อยู่หน้าเดิมจากเว็บ WordPress → หน้าใหม่ (301 = ย้ายถาวร ช่วยรักษาอันดับ Google)
+/about-us/*         /#about       301
+/about-us           /#about       301
+/service-charges/*  /#pricing     301
+/service-charges    /#pricing     301
+/our-service/*      /#services    301
+/our-service        /#services    301
+/angel-care-2/*     /#services    301
+/question/*         /#faq         301
+/question           /#faq         301
+/contact/*          /#contact     301
+/contact            /#contact     301
+/category/block/*   /news/        301
+/category/*         /news/        301
+/wp-admin/*         /admin/       301
+/wp-login.php       /admin/       301
+/feed/*             /news/        301
