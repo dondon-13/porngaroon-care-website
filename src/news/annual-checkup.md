@@ -2,7 +2,7 @@
 title: การตรวจสุขภาพประจำปีของผู้สูงอายุ
 date: 2026-10-14
 category: ความรู้การดูแล
-cover: /images/uploads/19-1.jpg
+cover: /images/uploads/34363.jpg
 cover_position: center
 summary: ถึงเวลาแล้วที่จะไปตรวจสุขภาพกัน
 hidden: false
