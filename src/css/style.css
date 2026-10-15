@@ -80,7 +80,7 @@ p { margin: 0; }
 .hero__lead { font-size: 18px; color: var(--muted); }
 .hero__text .btn-row { margin-top: 8px; }
 .hero__photo { flex: 0 1 400px; min-width: 0; margin: 0 auto; }
-.hero__photo img { width: 380px; max-width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; border: 3px solid var(--blue-line); padding: 8px; background: #fff; }
+.hero__photo img { width: 380px; max-width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; border: 3px solid var(--blue-line); }
 
 /* Trust strip */
 .trust { background: var(--mint); }
