@@ -3,6 +3,8 @@ backend:
   name: git-gateway
   branch: main
 
+publish_mode: editorial_workflow
+
 site_url: https://www.xn--12cc6a2dc4ab3jd1d3e4b9cd.com
 display_url: https://www.xn--12cc6a2dc4ab3jd1d3e4b9cd.com
 logo_url: /images/site/logo.png
