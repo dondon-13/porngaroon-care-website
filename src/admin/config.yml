@@ -28,7 +28,7 @@ collections:
       - { label: "หัวข้อ", name: "title", widget: "string" }
       - { label: "วันที่", name: "date", widget: "datetime", date_format: "DD/MM/YYYY", time_format: false, format: "YYYY-MM-DD" }
       - { label: "หมวดหมู่", name: "category", widget: "select", options: ["ความรู้การดูแล", "ข่าวสาร / โปรโมชั่น", "กิจกรรม", "วิดีโอ"], default: "ความรู้การดูแล" }
-      - { label: "รูปปก (แนวนอน 16:9)", name: "cover", widget: "image", required: false, choose_url: false, hint: "รูปปกทุกบทความจะแสดงในกรอบแนวนอนขนาดเดียวกัน (16:9) แนะนำรูปขนาด 1600×900 px ถ้าไม่ใส่ เว็บจะแสดงรูปโลโก้แทน ดูตัวอย่างได้ทางขวา" }
+      - { label: "รูปปก (แนวนอน 16:9)", name: "cover", widget: "image", media_library: { config: { max_file_size: 1048576 } }, required: false, choose_url: false, hint: "รูปปกทุกบทความจะแสดงในกรอบแนวนอนขนาดเดียวกัน (16:9) แนะนำรูปขนาด 1600×900 px ถ้าไม่ใส่ เว็บจะแสดงรูปโลโก้แทน ดูตัวอย่างได้ทางขวา" }
       - { label: "จัดตำแหน่งรูปปกในกรอบ", name: "cover_position", widget: "select", default: "center", required: false, hint: "ถ้าหัวคนในรูปถูกตัด ให้เลือก \"ด้านบน\"", options: [ { label: "ด้านบนของรูป", value: "top" }, { label: "กลางรูป", value: "center" }, { label: "ด้านล่างของรูป", value: "bottom" } ] }
       - { label: "คำอธิบายสั้น (สำหรับ Google)", name: "summary", widget: "text", required: false, hint: "1-2 ประโยค สรุปว่าบทความนี้เกี่ยวกับอะไร" }
       - { label: "ซ่อนบทความนี้ (ยังไม่เผยแพร่)", name: "hidden", widget: "boolean", default: false, required: false }
@@ -48,7 +48,7 @@ collections:
             widget: "list"
             summary: "{{fields.caption}}"
             fields:
-              - { label: "รูป", name: "image", widget: "image", hint: "แนะนำรูปแนวนอน และเบลอหน้าผู้ป่วยก่อนอัปโหลด" }
+              - { label: "รูป", name: "image", widget: "image", media_library: { config: { max_file_size: 1048576 } }, hint: "แนะนำรูปแนวนอน และเบลอหน้าผู้ป่วยก่อนอัปโหลด" }
               - { label: "คำบรรยาย", name: "caption", widget: "string" }
 
       - name: "pricing"
@@ -99,7 +99,7 @@ collections:
           - { label: "หัวข้อใหญ่", name: "hero_title", widget: "string" }
           - { label: "หัวข้อรอง (ขึ้นบรรทัดใหม่ได้)", name: "hero_subtitle", widget: "text" }
           - { label: "ข้อความแนะนำ", name: "hero_text", widget: "text" }
-          - { label: "รูปวงกลมหน้าแรก", name: "hero_image", widget: "image", hint: "แนะนำรูปสี่เหลี่ยมจัตุรัส" }
+          - { label: "รูปวงกลมหน้าแรก", name: "hero_image", widget: "image", media_library: { config: { max_file_size: 1048576 } }, hint: "แนะนำรูปสี่เหลี่ยมจัตุรัส" }
           - label: "จุดเด่น 4 ข้อ"
             name: "trust_points"
             widget: "list"
@@ -108,13 +108,13 @@ collections:
               - { label: "หัวข้อ", name: "title", widget: "string" }
               - { label: "รายละเอียด", name: "text", widget: "string" }
           - { label: "หัวข้อส่วนคนไข้เดินได้/ติดเตียง", name: "types_title", widget: "string" }
-          - { label: "รูปคนไข้เดินได้", name: "type_walking_image", widget: "image" }
-          - { label: "รูปคนไข้ติดเตียง", name: "type_bedridden_image", widget: "image" }
+          - { label: "รูปคนไข้เดินได้", name: "type_walking_image", widget: "image", media_library: { config: { max_file_size: 1048576 } } }
+          - { label: "รูปคนไข้ติดเตียง", name: "type_bedridden_image", widget: "image", media_library: { config: { max_file_size: 1048576 } } }
           - { label: "เกี่ยวกับเรา: หัวข้อ", name: "about_title", widget: "string" }
           - { label: "เกี่ยวกับเรา: หัวข้อรอง", name: "about_subtitle", widget: "string" }
           - { label: "เกี่ยวกับเรา: ย่อหน้า 1", name: "about_text_1", widget: "text" }
           - { label: "เกี่ยวกับเรา: ย่อหน้า 2", name: "about_text_2", widget: "text" }
-          - { label: "เกี่ยวกับเรา: รูป", name: "about_image", widget: "image" }
+          - { label: "เกี่ยวกับเรา: รูป", name: "about_image", widget: "image", media_library: { config: { max_file_size: 1048576 } } }
 
       - name: "settings"
         label: "ข้อมูลติดต่อและตั้งค่าเว็บ"
