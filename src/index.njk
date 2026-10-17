@@ -128,11 +128,41 @@ permalink: /
 </section>
 
 <section id="faq" class="faq wrap" aria-labelledby="faq-title">
-  <h2 id="faq-title" class="h2">คำถามที่พบบ่อย</h2>
-  {%- for f in faq.items %}
-  <details><summary>{{ f.question }}</summary><p>{{ f.answer }}</p></details>
-  {%- endfor %}
+  <div class="faq__intro">
+    <h2 id="faq-title" class="h2">คำถามที่พบบ่อย</h2>
+    <p>รวมคำถามที่ครอบครัวถามเราบ่อยที่สุด กดที่คำถามเพื่อดูคำตอบ</p>
+  </div>
+  <div class="faq__list" id="faq-list">
+    {%- for f in faq.items %}
+    <details name="faq" class="faq__item{% if loop.index > 6 %} faq__item--more{% endif %}">
+      <summary>{{ f.question | trim }}</summary>
+      <div class="faq__answer"><p>{{ f.answer | trim | nl2br | safe }}</p></div>
+    </details>
+    {%- endfor %}
+    {%- if faq.items.length > 6 %}
+    <button type="button" class="faq__toggle" aria-controls="faq-list" aria-expanded="false"
+      data-more="ดูคำถามทั้งหมด ({{ faq.items.length }} ข้อ)" data-less="ย่อคำถาม">ดูคำถามทั้งหมด ({{ faq.items.length }} ข้อ)</button>
+    {%- endif %}
+  </div>
+  <div class="faq__ask">
+    <p>ไม่พบคำตอบที่ต้องการ?</p>
+    <a class="btn btn--primary" href="{{ 'สอบถามข้อมูลบริการ' | lineMessage(settings.line_id) }}" target="_blank" rel="noopener">ถามเราทาง LINE</a>
+  </div>
 </section>
+<script>
+(function () {
+  var list = document.getElementById("faq-list");
+  var btn = list && list.querySelector(".faq__toggle");
+  if (!btn) return;
+  list.classList.add("is-collapsed");
+  btn.addEventListener("click", function () {
+    var collapsed = list.classList.toggle("is-collapsed");
+    btn.setAttribute("aria-expanded", String(!collapsed));
+    btn.textContent = collapsed ? btn.dataset.more : btn.dataset.less;
+    if (collapsed) document.getElementById("faq").scrollIntoView({ behavior: "smooth" });
+  });
+})();
+</script>
 
 <section id="about" class="about" aria-labelledby="about-title">
   <div class="about__inner">
