@@ -21,7 +21,7 @@ collections:
     extension: "md"
     format: "frontmatter"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}{{second}}"
     sortable_fields: ["date", "title"]
     summary: "{{title}} — {{date | date('DD/MM/YYYY')}}"
     fields:
