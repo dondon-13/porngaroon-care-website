@@ -23,22 +23,33 @@
     return user.jwt();
   }
 
+  // Decap shows thrown objects as "[object Object]"; log the real reason for debugging.
+  window.addEventListener("unhandledrejection", (e) => {
+    const r = e.reason;
+    console.error("[cms] unhandled rejection:", r instanceof Error ? r.stack || r.message : r, (() => { try { return JSON.stringify(r); } catch { return ""; } })());
+  });
+
   async function api(action, params) {
-    const res = await fetch(API, {
-      method: "POST",
-      headers: { "content-type": "application/json", authorization: `Bearer ${await token()}` },
-      body: JSON.stringify({ action, ...params }),
-    });
-    const body = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(body.error || `ผิดพลาด (${res.status})`);
-    return body;
+    try {
+      const res = await fetch(API, {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${await token()}` },
+        body: JSON.stringify({ action, ...params }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || `ผิดพลาด (${res.status})`);
+      return body;
+    } catch (e) {
+      console.error(`[cms] api "${action}" failed:`, e);
+      throw e instanceof Error ? e : new Error(String(e && e.message) || "request failed");
+    }
   }
 
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
       const r = new FileReader();
       r.onload = () => resolve(String(r.result).split(",")[1]);
-      r.onerror = reject;
+      r.onerror = () => reject(new Error("อ่านไฟล์รูปไม่สำเร็จ"));
       r.readAsDataURL(file);
     });
   }
@@ -47,6 +58,10 @@
 
   async function upload(assetProxy) {
     const file = assetProxy.fileObj;
+    if (!file) {
+      // Existing library image (no new bytes to upload): nothing to do.
+      return normalizeMedia(assetProxy.path, 0);
+    }
     await api("uploadMedia", { path: assetProxy.path, contentType: file.type, base64: await fileToBase64(file) });
     return normalizeMedia(assetProxy.path, file.size);
   }
