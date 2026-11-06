@@ -161,7 +161,12 @@
     }
     async getEntry(path) {
       const [row] = await api("getFiles", { paths: [path] });
-      if (row.content == null) throw new Error(`ไม่พบเนื้อหา ${path}`);
+      if (row.content == null) {
+        // Decap treats status 404 as "no such published entry" (e.g. when checking slug uniqueness)
+        const err = new Error(`ไม่พบเนื้อหา ${path}`);
+        err.status = 404;
+        throw err;
+      }
       return { file: { path, id: null }, data: row.content };
     }
 
@@ -173,9 +178,9 @@
       if (id) [collection, slug] = id.split("/");
       const entry = await api("getUnpublished", { key: `${collection}/${slug}` });
       if (!entry) {
-        // Same shape as decap-cms-lib-util's EditorialWorkflowError
+        // Same shape as decap-cms-lib-util's EditorialWorkflowError (name must match EDITORIAL_WORKFLOW_ERROR)
         const err = new Error("content is not under editorial workflow");
-        err.name = "EditorialWorkflowError";
+        err.name = "EDITORIAL_WORKFLOW_ERROR";
         err.notUnderEditorialWorkflow = true;
         throw err;
       }
