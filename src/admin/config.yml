@@ -1,7 +1,6 @@
 # ระบบหลังบ้าน (Decap CMS) — ทีมงานแก้ไขเนื้อหาที่ /admin
 backend:
-  name: git-gateway
-  branch: main
+  name: netlify-db   # custom backend: src/admin/netlify-db-backend.js (content in Netlify Database)
 
 publish_mode: editorial_workflow
 

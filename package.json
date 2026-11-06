@@ -4,10 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "eleventy",
-    "start": "eleventy --serve"
+    "build": "node scripts/pull-content.mjs && eleventy",
+    "start": "node scripts/pull-content.mjs && eleventy --serve",
+    "seed": "node scripts/seed-from-repo.mjs",
+    "export": "node scripts/export-content.mjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.6"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.7",
+    "@netlify/database": "^2.0.2"
   }
 }

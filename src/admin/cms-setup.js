@@ -53,3 +53,7 @@
   });
   CMS.registerPreviewTemplate("news", NewsPreview);
 })();
+
+// Custom backend (stores content in Netlify Database), then start the CMS (CMS_MANUAL_INIT is set in index.html)
+CMS.registerBackend("netlify-db", window.NetlifyDbBackend);
+CMS.init();
