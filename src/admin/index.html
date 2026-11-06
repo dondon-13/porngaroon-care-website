@@ -6,6 +6,14 @@
   <meta name="robots" content="noindex">
   <title>ระบบหลังบ้าน | พรการุญเฝ้าไข้</title>
   <link rel="icon" type="image/png" href="/images/site/favicon-32.png">
+  <script>
+    // Local testing only: open /admin?identity_site=https://YOUR-SITE.netlify.app once on localhost.
+    // The Identity widget reads the site URL from localStorage instead of prompting for it.
+    try {
+      var site = new URLSearchParams(location.search).get("identity_site");
+      if (site && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) localStorage.setItem("netlifySiteURL", site);
+    } catch (e) {}
+  </script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>

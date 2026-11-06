@@ -61,20 +61,29 @@
     componentDidMount() {
       const ni = window.netlifyIdentity;
       if (!ni) return;
-      const finish = (user) => {
+      this.onLogin = (user) => {
         if (user) {
           ni.close();
           this.props.onLogin(user);
         }
       };
-      ni.on("login", finish);
+      this.onError = (err) => console.error("[netlify-identity]", err);
+      ni.on("login", this.onLogin);
+      ni.on("error", this.onError);
+      // Already signed in (e.g. token still valid): continue without showing the modal.
       identityReady.then(() => {
         const user = ni.currentUser();
-        if (user) finish(user);
-        else ni.open("login");
+        if (user) this.onLogin(user);
       });
     },
+    componentWillUnmount() {
+      const ni = window.netlifyIdentity;
+      if (!ni) return;
+      ni.off("login", this.onLogin);
+      ni.off("error", this.onError);
+    },
     render() {
+      // The modal opens only from this click, so remounts during startup cannot close it.
       return h(
         "section",
         { className: "nc-githubAuthenticationPage-root" },

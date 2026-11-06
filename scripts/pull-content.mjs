@@ -5,9 +5,18 @@ import { mkdir, writeFile, readdir, rm, stat } from "node:fs/promises";
 import { dirname } from "node:path";
 import { pool, mediaStore } from "../netlify/lib/store.mjs";
 
+// First-deploy escape hatch: Netlify applies migrations AFTER the build command, so on the very
+// first production deploy the tables don't exist yet. With CMS_BOOTSTRAP=1 (set it only until the
+// database is migrated and seeded) an unusable/empty DB falls back to the content committed in git.
+const bootstrap = process.env.CMS_BOOTSTRAP === "1";
+
 try {
   const db = pool();
   const { rows: files } = await db.query(`SELECT path, content FROM cms_files`);
+  if (files.length === 0 && bootstrap) {
+    console.warn("[cms] BOOTSTRAP: database is empty, building from content committed in git");
+    process.exit(0);
+  }
   if (files.length === 0) throw new Error("cms_files is empty — run `npm run seed` first");
 
   // Remove stale generated news (keeps news.11tydata.js)
@@ -33,6 +42,10 @@ try {
   console.log(`[cms] wrote ${files.length} content files, ${downloaded}/${media.length} media downloaded`);
   process.exit(0);
 } catch (e) {
+  if (bootstrap) {
+    console.warn(`[cms] BOOTSTRAP: ${e.message} — building from content committed in git`);
+    process.exit(0);
+  }
   console.error(`[cms] Could not pull content from Netlify Database: ${e.message}`);
   process.exit(1);
 }
