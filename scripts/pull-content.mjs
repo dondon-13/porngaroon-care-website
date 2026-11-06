@@ -3,6 +3,7 @@
 // or empty, so a bad deploy never replaces the live site.
 import { mkdir, writeFile, readdir, rm, stat } from "node:fs/promises";
 import { dirname } from "node:path";
+import { seed } from "./seed-from-repo.mjs";
 import { pool, mediaStore } from "../netlify/lib/store.mjs";
 
 // First-deploy escape hatch: Netlify applies migrations AFTER the build command, so on the very
@@ -12,10 +13,12 @@ const bootstrap = process.env.CMS_BOOTSTRAP === "1";
 
 try {
   const db = pool();
-  const { rows: files } = await db.query(`SELECT path, content FROM cms_files`);
+  let { rows: files } = await db.query(`SELECT path, content FROM cms_files`);
   if (files.length === 0 && bootstrap) {
-    console.warn("[cms] BOOTSTRAP: database is empty, building from content committed in git");
-    process.exit(0);
+    // Tables exist but are empty: import the content committed in git (build has DB write access).
+    console.warn("[cms] BOOTSTRAP: database is empty, seeding it from content committed in git");
+    await seed();
+    ({ rows: files } = await db.query(`SELECT path, content FROM cms_files`));
   }
   if (files.length === 0) throw new Error("cms_files is empty — run `npm run seed` first");
 

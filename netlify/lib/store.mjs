@@ -1,17 +1,38 @@
 // Shared storage helpers for CMS functions and build scripts.
+import { readFileSync } from "node:fs";
 import { getDatabase } from "@netlify/database";
 import { getStore } from "@netlify/blobs";
 
+// Connection string: NETLIFY_DB_URL (set by Netlify at build/runtime and by `netlify dev`),
+// else CMS_DB_URL (explicit override, e.g. a production URL for seeding),
+// else the local dev database recorded by the Netlify CLI in .netlify/state.json.
+function connectionString() {
+  if (process.env.NETLIFY_DB_URL) return undefined; // getDatabase() reads it itself
+  if (process.env.CMS_DB_URL) return process.env.CMS_DB_URL;
+  try {
+    const url = JSON.parse(readFileSync(".netlify/state.json", "utf8")).dbConnectionString;
+    if (url) console.warn("[cms] NETLIFY_DB_URL not set, using local dev database from .netlify/state.json");
+    return url;
+  } catch {
+    return undefined;
+  }
+}
+
 let _db;
 export function pool() {
-  if (!_db) _db = getDatabase();
+  if (!_db) _db = getDatabase({ connectionString: connectionString() });
   return _db.pool;
 }
 
 export function mediaStore() {
   // Inside Netlify (functions/build) Blobs is auto-configured. Elsewhere (seed script) pass credentials.
-  const siteID = process.env.NETLIFY_SITE_ID;
-  const token = process.env.NETLIFY_AUTH_TOKEN;
+  let siteID = process.env.NETLIFY_SITE_ID;
+  if (!siteID) {
+    try {
+      siteID = JSON.parse(readFileSync(".netlify/state.json", "utf8")).siteId;
+    } catch {}
+  }
+  const token = process.env.NETLIFY_AUTH_TOKEN; // personal access token, only needed outside Netlify
   if (siteID && token) return getStore({ name: "cms-media", siteID, token });
   return getStore("cms-media");
 }
