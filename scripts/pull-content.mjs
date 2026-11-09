@@ -30,19 +30,27 @@ try {
     await writeFile(path, content);
   }
 
-  const { rows: media } = await db.query(`SELECT path, size FROM cms_media`);
-  const store = mediaStore();
+  // Media: best effort. Netlify Blobs is not available to the build command, so a failure here only
+  // warns; /images/uploads/* falls back to the cms-media function at runtime (see src/_redirects).
   let downloaded = 0;
-  for (const { path, size } of media) {
-    const existing = await stat(path).catch(() => null);
-    if (existing && existing.size === size) continue;
-    const bytes = await store.get(path, { type: "arrayBuffer" });
-    if (!bytes) throw new Error(`Missing blob for ${path}`);
-    await mkdir(dirname(path), { recursive: true });
-    await writeFile(path, Buffer.from(bytes));
-    downloaded++;
+  let mediaCount = 0;
+  try {
+    const { rows: media } = await db.query(`SELECT path, size FROM cms_media`);
+    mediaCount = media.length;
+    const store = mediaStore();
+    for (const { path, size } of media) {
+      const existing = await stat(path).catch(() => null);
+      if (existing && existing.size === size) continue;
+      const bytes = await store.get(path, { type: "arrayBuffer" });
+      if (!bytes) throw new Error(`Missing blob for ${path}`);
+      await mkdir(dirname(path), { recursive: true });
+      await writeFile(path, Buffer.from(bytes));
+      downloaded++;
+    }
+  } catch (e) {
+    console.warn(`[cms] media not downloaded at build time (${e.message}); served at runtime by cms-media instead`);
   }
-  console.log(`[cms] wrote ${files.length} content files, ${downloaded}/${media.length} media downloaded`);
+  console.log(`[cms] wrote ${files.length} content files, ${downloaded}/${mediaCount} media downloaded`);
   process.exit(0);
 } catch (e) {
   if (bootstrap) {
