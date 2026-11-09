@@ -15,3 +15,6 @@
 /wp-admin/*         /admin/       301
 /wp-login.php       /admin/       301
 /feed/*             /news/        301
+
+# รูปที่อัปโหลดผ่านหลังบ้าน (เก็บใน Netlify Blobs) — ถ้าไม่มีไฟล์ในเว็บ ให้ดึงจากฟังก์ชัน cms-media
+/images/uploads/*  /.netlify/functions/cms-media?path=src/images/uploads/:splat  200
