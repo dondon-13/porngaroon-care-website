@@ -7,5 +7,5 @@ export default async (req) => {
   const { rows } = await pool().query(`SELECT content_type FROM cms_media WHERE path=$1`, [path]);
   const bytes = await mediaStore().get(path, { type: "arrayBuffer" });
   if (!rows[0] || !bytes) return new Response("Not found", { status: 404 });
-  return new Response(bytes, { headers: { "content-type": rows[0].content_type, "cache-control": "private, max-age=60" } });
+  return new Response(bytes, { headers: { "content-type": rows[0].content_type, "cache-control": "public, max-age=604800" } });
 };
